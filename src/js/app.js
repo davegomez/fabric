@@ -1,4 +1,4 @@
-import '../scss/main.scss';
+import "../scss/main.scss";
 import {greetings} from "./hello.js";
 
 "use strict";
