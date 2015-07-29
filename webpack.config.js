@@ -15,7 +15,9 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract("style-loader",
-        "css-loader?sourceMap!autoprefixer-loader?browsers=last 2 version!sass-loader?outputStyle=expanded&sourceMap=true&sourceMapContents=true")
+        "css-loader?sourceMap" +
+        "!autoprefixer-loader?browsers=last 2 version" +
+        "!sass-loader?outputStyle=expanded&sourceMap&sourceMapContents")
       }
     ]
   },
