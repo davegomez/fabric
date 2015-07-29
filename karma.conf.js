@@ -12,7 +12,10 @@ module.exports = function(config) {
 
     basePath: "",
     frameworks: ["tap"],
-    files: ["src/test/**/*.js"],
+    files: [
+      "src/test/**/*.js",
+      "./node_modules/phantomjs-polyfill/bind-polyfill.js"
+    ],
 
     preprocessors: {
       "src/test/**/*.js": ["webpack"]
