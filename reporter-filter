@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+const through2 = require('through2');
+const chalk = require('chalk');
+const split = require('split');
+
+//const rPhantomLogs = /PhantomJS.*?'(.*)'/g;
+//const rPass = /\# pass( *)(\d+)/g;
+//const rFail = /\# fail( *)(\d+)/g;
+
+/** Regular expression for PhantomJS logs. */
+var accumulatedLog = '';
+const rLog = /(.*)LOG: '(.*)'/g;
+
+var isCapturing = false;
+
+// TODO: Take the TAP report from the chunks and generate a string with it.
+const streamFilter = function(chunk, enc, callback) {
+  var str = chunk.toString();
+  const matches = str.match(rLog);
+
+  if (matches) {
+    isCapturing = true;
+  }
+
+  if (isCapturing && matches) {
+    accumulatedLog += str + '\n';
+    return callback();
+  }
+
+  console.log('final block', accumulatedLog);
+  isCapturing = false;
+  console.log('end block');
+
+  this.push(chunk);
+  callback();
+};
+
+process.stdin
+  .pipe(split())
+  .pipe(through2(streamFilter))
+  .pipe(process.stdout);
+

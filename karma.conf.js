@@ -3,11 +3,13 @@ var webpack = require("webpack");
 module.exports = function(config) {
   config.set({
     plugins: [
-      require("karma-webpack"),
-      require("karma-tap"),
-      require("karma-chrome-launcher"),
-      require("karma-phantomjs-launcher"),
-      require("karma-coverage")
+      "karma-webpack",
+      "karma-tap",
+      "karma-chrome-launcher",
+      "karma-phantomjs-launcher",
+      "karma-coverage",
+      "karma-tap-reporter",
+      "karma-verbose-reporter"
     ],
 
     basePath: "",

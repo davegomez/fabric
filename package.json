@@ -4,7 +4,8 @@
   "description": "ES6 Development Facility",
   "scripts": {
     "test": "karma start",
-    "serve": "webpack -dw & npm test"
+    "serve": "webpack -dw & npm test",
+    "serve:filter": "webpack -dw & npm test | ./reporter-filter"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "blue-tape": "^0.1.10",
     "browser-sync": "^2.8.0",
     "browser-sync-webpack-plugin": "^0.1.3",
+    "chalk": "^1.1.0",
     "css-loader": "^0.15.5",
     "eslint": "^0.24.1",
     "eslint-loader": "^0.14.2",
@@ -42,13 +44,17 @@
     "karma-coverage": "^0.4.2",
     "karma-phantomjs-launcher": "^0.2.0",
     "karma-tap": "^1.0.3",
+    "karma-tap-reporter": "0.0.4",
+    "karma-tape-reporter": "^1.0.3",
     "karma-webpack": "^1.6.0",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "phantomjs": "^1.9.17",
     "phantomjs-polyfill": "0.0.1",
     "sass-loader": "^1.0.2",
+    "split": "^1.0.0",
     "style-loader": "^0.12.3",
+    "through2": "^2.0.0",
     "webpack": "^1.10.1"
   }
 }
