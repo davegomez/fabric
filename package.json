@@ -10,11 +10,16 @@
     "type": "git",
     "url": "git@github.com:davegomez/fabric.git"
   },
-  "author": "David Gómez <dgomez@hugeinc.com>",
+  "author": {
+    "name": "David Gómez",
+    "email": "dg.dave@gmail.com",
+    "url": "https://github.com/davegomez"
+  },
   "contributors": [
     {
       "name": "Camilo Orrego",
-      "email": "aorrego@hugeinc.com"
+      "email": "aorrego@hugeinc.com",
+      "url": "https://github.com/baldore"
     }
   ],
   "license": "MIT",
