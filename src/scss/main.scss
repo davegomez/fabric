@@ -1,12 +1,11 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100italic,100,400italic);
 
 html {
   box-sizing: border-box;
 }
 
 body {
-  background-color: rgb(245, 245, 245);
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -23,8 +22,21 @@ body {
   height: 100vh;
   justify-content: center;
 
-  & .fabric {
-    color: rgb(60, 123, 214);
+  p {
+    color: rgb(80, 80, 80);
+    font-size: 32px;
+    font-style: italic;
+    line-height: 1;
+    margin-top: 0;
+  }
+
+  .fabric {
+    color: rgb(200, 200, 200);
+    font-size: 80px;
+    font-weight: 100;
+    line-height: 1.2;
+    margin-top: 0;
+    text-align: center;
   }
 }
 
