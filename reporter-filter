@@ -6,6 +6,7 @@
 
 var split = require('split');
 var through2 = require('through2');
+var once = require('once');
 
 /**
  * Empty function. Useful to initialize functions.
@@ -100,21 +101,42 @@ var sequentialStringCatcher = {
 };
 
 /**
+ * Set different colors and removes unnecessary info for each line in the TAP report.
+ * @param {String} report Raw string.
+ * @returns {String} Properly formatted TAP report.
+ */
+var formatTAPReport = function(report) {
+  // TODO: Implement properly format for TAP report.
+  return '\n----------------------\n' + report + '\n----------------------\n';
+};
+
+/**
+ * Configures a sequentialStringCatcher the first time to capture a TAP block.
+ * @param {Function} callback Function to be called when the formatted block is ready.
+ * @returns {sequentialStringCatcher} Configured instance
+ */
+var configSequentialCatcher = once(function(callback) {
+  var sequentialCatcherInstance = Object.create(sequentialStringCatcher)
+    .startWhen(isTAPFirstLine)
+    .takeWhile(isLogLine);
+
+  sequentialCatcherInstance.onEnd(function(block) {
+    callback(formatTAPReport(block));
+  });
+
+  return sequentialCatcherInstance;
+});
+
+/**
  * Read the lines of the stream and formats the TAP block.
  * @returns {DestroyableTransform} Though2 return object to be used in the stream line.
  */
-function formatLogs() {
-  var sequentialCatcher = Object.create(sequentialStringCatcher)
-    .startWhen(isTAPFirstLine)
-    .takeWhile(isLogLine)
-    .onEnd(function(block) {
-      console.log('\n================');
-      console.log(block);
-      console.log('================\n');
-    });
+var formatLogs = function() {
+  var sequentialCatcher;
 
   return through2(function(chunk, enc, callback) {
     var str = chunk.toString();
+    sequentialCatcher = configSequentialCatcher(this.push.bind(this));
 
     if (!sequentialCatcher.add(str)) {
       this.push(Buffer.concat([Buffer('\n'), chunk]));
@@ -122,7 +144,7 @@ function formatLogs() {
 
     callback();
   });
-}
+};
 
 process.stdin
   .pipe(split())
