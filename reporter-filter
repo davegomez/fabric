@@ -1,6 +1,128 @@
 #!/usr/bin/env node
+/**
+ * @fileOverview Filter used to format TAP report coming from browsers.
+ * @name Reporter Filter
+ */
+
 var split = require('split');
-var formatLogs = require('./format-logs');
+var through2 = require('through2');
+
+/**
+ * Empty function. Useful to initialize functions.
+ */
+var noop = function() {};
+
+/**
+ * Regex functional helper. Receives a regular expression and returns a new function
+ * that tests a string.
+ * @param {RegExp} regex
+ * @returns {Function}
+ */
+var matchRegex = function(regex) {
+  return function(str) {
+    return regex.test(str);
+  };
+};
+
+/** Validates if the function is the first line of the TAP report.  */
+var isTAPFirstLine = matchRegex(/(.*) LOG: 'TAP (.*)'/);
+
+/** Validates if the function is part of the TAP report.  */
+var isLogLine = matchRegex(/(.*) LOG: '(.*)'/);
+
+/**
+ * Object used to capture a block of content. It receives data until that data doesn't
+ * meet a defined requirement and then runs a callback with all the caught info.
+ */
+var sequentialStringCatcher = {
+  queue: [],
+  done: true,
+  callbacks: {
+    startWhen: noop,
+    takeWhile: noop,
+    onEnd: noop
+  },
+
+  /**
+   * Sets a new callback to identify when the block begins.
+   * @param {Function} startWhenFn Function that returns true/false.
+   * @returns {sequentialStringCatcher} This pointer.
+   */
+  startWhen: function(startWhenFn) {
+    this.callbacks.startWhen = startWhenFn;
+    return this;
+  },
+
+  /**
+   * Sets a new callback to identify when a line meets a specific requirement.
+   * @param {Function} takeWhileFn Function that returns true/false.
+   * @returns {sequentialStringCatcher} This pointer.
+   */
+  takeWhile: function(takeWhileFn) {
+    this.callbacks.takeWhile = takeWhileFn;
+    return this;
+  },
+
+  /**
+   * Sets a new function to be called when the component finds a line that doesn't
+   * meet the requirements specified in takeWhile function.
+   * @param {Function} onEndFn Function that returns true/false.
+   * @returns {sequentialStringCatcher} This pointer.
+   */
+  onEnd: function(onEndFn) {
+    this.callbacks.onEnd = onEndFn;
+    return this;
+  },
+
+  /**
+   * Add a new line to the block if the block has started and the line meets the
+   * requirements specified in takeWhile function.
+   * @param {String} str Line to verify.
+   * @returns {boolean} True if the line was added. False otherwise.
+   */
+  add: function(str) {
+    if (this.done && !this.callbacks.startWhen(str)) {
+      return false;
+    }
+
+    this.done = false;
+
+    if (this.callbacks.takeWhile(str)) {
+      this.queue.push(str);
+      return true;
+    }
+
+    this.done = true;
+    this.callbacks.onEnd(this.queue.join('\n'));
+    this.queue.length = 0;
+    return false;
+  }
+};
+
+/**
+ * Read the lines of the stream and formats the TAP block.
+ * @returns {DestroyableTransform} Though2 return object to be used in the stream line.
+ */
+function formatLogs() {
+  var sequentialCatcher = Object.create(sequentialStringCatcher)
+    .startWhen(isTAPFirstLine)
+    .takeWhile(isLogLine)
+    .onEnd(function(block) {
+      console.log('\n================');
+      console.log(block);
+      console.log('================\n');
+    });
+
+  return through2(function(chunk, enc, callback) {
+    var str = chunk.toString();
+
+    if (!sequentialCatcher.add(str)) {
+      this.push(Buffer.concat([Buffer('\n'), chunk]));
+    }
+
+    callback();
+  });
+}
 
 process.stdin
   .pipe(split())
