@@ -7,9 +7,7 @@ module.exports = function(config) {
       "karma-tap",
       "karma-chrome-launcher",
       "karma-phantomjs-launcher",
-      "karma-coverage",
-      "karma-tap-reporter",
-      "karma-verbose-reporter"
+      "karma-coverage"
     ],
 
     basePath: "",

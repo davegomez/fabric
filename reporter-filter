@@ -7,6 +7,8 @@
 var split = require('split');
 var through2 = require('through2');
 var once = require('once');
+var faucet = require('faucet');
+var PassThrough = require('stream').PassThrough;
 
 /**
  * Empty function. Useful to initialize functions.
@@ -39,39 +41,22 @@ var sequentialStringCatcher = {
   queue: [],
   done: true,
   callbacks: {
-    startWhen: noop,
-    takeWhile: noop,
-    onEnd: noop
+    startRead: noop,
+    reading: noop,
+    end: noop,
+    addSuccess: noop,
+    addFailure: noop
   },
 
   /**
-   * Sets a new callback to identify when the block begins.
-   * @param {Function} startWhenFn Function that returns true/false.
-   * @returns {sequentialStringCatcher} This pointer.
+   * Add a new event handler.
+   * @param {String} event Event target for handler. It can use startRead, reading, end, addSuccess or addFailure
+   * @param {Function} handler Function to bind to the event.
+   * @returns {sequentialStringCatcher} this instance.
    */
-  startWhen: function(startWhenFn) {
-    this.callbacks.startWhen = startWhenFn;
-    return this;
-  },
-
-  /**
-   * Sets a new callback to identify when a line meets a specific requirement.
-   * @param {Function} takeWhileFn Function that returns true/false.
-   * @returns {sequentialStringCatcher} This pointer.
-   */
-  takeWhile: function(takeWhileFn) {
-    this.callbacks.takeWhile = takeWhileFn;
-    return this;
-  },
-
-  /**
-   * Sets a new function to be called when the component finds a line that doesn't
-   * meet the requirements specified in takeWhile function.
-   * @param {Function} onEndFn Function that returns true/false.
-   * @returns {sequentialStringCatcher} This pointer.
-   */
-  onEnd: function(onEndFn) {
-    this.callbacks.onEnd = onEndFn;
+  on: function(event, handler) {
+    if (typeof handler === 'undefined') return this;
+    this.callbacks[event] = handler;
     return this;
   },
 
@@ -82,19 +67,21 @@ var sequentialStringCatcher = {
    * @returns {boolean} True if the line was added. False otherwise.
    */
   add: function(str) {
-    if (this.done && !this.callbacks.startWhen(str)) {
+    if (this.done && !this.callbacks.startRead(str)) {
+      this.callbacks.addFailure('\n' + str);
       return false;
     }
 
     this.done = false;
 
-    if (this.callbacks.takeWhile(str)) {
+    if (this.callbacks.reading(str)) {
       this.queue.push(str);
+      this.callbacks.addSuccess();
       return true;
     }
 
     this.done = true;
-    this.callbacks.onEnd(this.queue.join('\n'));
+    this.callbacks.end(this.queue.join('\n'));
     this.queue.length = 0;
     return false;
   }
@@ -103,28 +90,44 @@ var sequentialStringCatcher = {
 /**
  * Set different colors and removes unnecessary info for each line in the TAP report.
  * @param {String} report Raw string.
+ * @param {Function} onFormatEnd Function to be called when the formatting ends.
  * @returns {String} Properly formatted TAP report.
  */
-var formatTAPReport = function(report) {
-  // TODO: Implement properly format for TAP report.
-  return '\n----------------------\n' + report + '\n----------------------';
+var formatTAPReport = function(report, onFormatEnd) {
+  var stream = new PassThrough();
+  var faucetStream;
+  var formattedReport = '\n\n';
+
+  stream.write(report.replace(/(.*) LOG: '(.*)'/g, '$2'));
+  stream.end();
+  faucetStream = stream.pipe(faucet());
+
+  faucetStream.on('data', function(chunk) {
+    formattedReport += chunk;
+  });
+
+  faucetStream.on('end', function() {
+    onFormatEnd(formattedReport);
+  });
 };
 
 /**
  * Configures a sequentialStringCatcher the first time to capture a TAP block.
- * @param {Function} callback Function to be called when the formatted block is ready.
+ * @param {Object} callbacks Layer object used to set the handlers for the sequentialStringCatcher
+ * @param {Function} callbacks.onAddSuccess addSuccess callback.
+ * @param {Function} callbacks.onAddFailure addFailure callback.
+ * @param {Function} callbacks.onEnd end callback.
  * @returns {sequentialStringCatcher} Configured instance
  */
-var configSequentialCatcher = once(function(callback) {
-  var sequentialCatcherInstance = Object.create(sequentialStringCatcher)
-    .startWhen(isTAPFirstLine)
-    .takeWhile(isLogLine);
-
-  sequentialCatcherInstance.onEnd(function(block) {
-    callback(formatTAPReport(block));
-  });
-
-  return sequentialCatcherInstance;
+var configSequentialCatcher = once(function(callbacks) {
+  return Object.create(sequentialStringCatcher)
+    .on('addSuccess', callbacks.onAddSuccess)
+    .on('addFailure', callbacks.onAddFailure)
+    .on('startRead', isTAPFirstLine)
+    .on('reading', isLogLine)
+    .on('end', function(block) {
+      formatTAPReport(block, callbacks.onEnd);
+    });
 });
 
 /**
@@ -136,13 +139,14 @@ var formatLogs = function() {
 
   return through2(function(chunk, enc, callback) {
     var str = chunk.toString();
-    sequentialCatcher = configSequentialCatcher(this.push.bind(this));
 
-    if (!sequentialCatcher.add(str)) {
-      this.push(Buffer.concat([Buffer('\n'), chunk]));
-    }
+    sequentialCatcher = configSequentialCatcher({
+      onAddSuccess: callback.bind(this),
+      onAddFailure: callback.bind(this, null),
+      onEnd: callback.bind(this, null)
+    });
 
-    callback();
+    sequentialCatcher.add(str);
   });
 };
 
