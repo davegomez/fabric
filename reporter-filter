@@ -107,7 +107,7 @@ var sequentialStringCatcher = {
  */
 var formatTAPReport = function(report) {
   // TODO: Implement properly format for TAP report.
-  return '\n----------------------\n' + report + '\n----------------------\n';
+  return '\n----------------------\n' + report + '\n----------------------';
 };
 
 /**
