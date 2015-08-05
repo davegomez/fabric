@@ -4,8 +4,7 @@
   "description": "ES6 Development Facility",
   "scripts": {
     "test": "karma start",
-    "serve": "webpack -dw & npm test",
-    "serve:filter": "webpack -dw & npm test | ./reporter-filter"
+    "serve": "webpack -dw & npm test | ./reporter-filter"
   },
   "repository": {
     "type": "git",
