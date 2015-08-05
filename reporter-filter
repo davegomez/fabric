@@ -41,7 +41,7 @@ var sequentialStringCatcher = {
   queue: [],
   done: true,
   callbacks: {
-    startRead: noop,
+    readingStart: noop,
     reading: noop,
     end: noop,
     addSuccess: noop,
@@ -50,24 +50,24 @@ var sequentialStringCatcher = {
 
   /**
    * Add a new event handler.
-   * @param {String} event Event target for handler. It can use startRead, reading, end, addSuccess or addFailure
+   * @param {String} event Event target for handler. It can use readingStart, reading, end, addSuccess or addFailure
    * @param {Function} handler Function to bind to the event.
    * @returns {sequentialStringCatcher} this instance.
    */
   on: function(event, handler) {
-    if (typeof handler === 'undefined') return this;
+    if (typeof handler !== 'function' || !this.callbacks[event]) return this;
     this.callbacks[event] = handler;
     return this;
   },
 
   /**
    * Add a new line to the block if the block has started and the line meets the
-   * requirements specified in takeWhile function.
+   * requirements specified on the 'reading' function.
    * @param {String} str Line to verify.
-   * @returns {boolean} True if the line was added. False otherwise.
+   * @returns {Boolean} True if the line was added. False otherwise.
    */
   add: function(str) {
-    if (this.done && !this.callbacks.startRead(str)) {
+    if (this.done && !this.callbacks.readingStart(str)) {
       this.callbacks.addFailure('\n' + str);
       return false;
     }
@@ -95,20 +95,17 @@ var sequentialStringCatcher = {
  */
 var formatTAPReport = function(report, onFormatEnd) {
   var stream = new PassThrough();
-  var faucetStream;
   var formattedReport = '\n\n';
 
   stream.write(report.replace(/(.*) LOG: '(.*)'/g, '$2'));
   stream.end();
-  faucetStream = stream.pipe(faucet());
-
-  faucetStream.on('data', function(chunk) {
-    formattedReport += chunk;
-  });
-
-  faucetStream.on('end', function() {
-    onFormatEnd(formattedReport);
-  });
+  stream.pipe(faucet())
+    .on('data', function(chunk) {
+      formattedReport += chunk;
+    })
+    .on('end', function() {
+      onFormatEnd(formattedReport);
+    });
 };
 
 /**
@@ -123,7 +120,7 @@ var configSequentialCatcher = once(function(callbacks) {
   return Object.create(sequentialStringCatcher)
     .on('addSuccess', callbacks.onAddSuccess)
     .on('addFailure', callbacks.onAddFailure)
-    .on('startRead', isTAPFirstLine)
+    .on('readingStart', isTAPFirstLine)
     .on('reading', isLogLine)
     .on('end', function(block) {
       formatTAPReport(block, callbacks.onEnd);
@@ -154,4 +151,3 @@ process.stdin
   .pipe(split())
   .pipe(formatLogs())
   .pipe(process.stdout);
-
