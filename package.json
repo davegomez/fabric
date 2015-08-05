@@ -28,37 +28,37 @@
   },
   "homepage": "https://github.com/davegomez/fabric",
   "devDependencies": {
-    "autoprefixer-loader": "*",
-    "babel": "*",
-    "babel-core": "*",
-    "babel-loader": "*",
-    "blue-tape": "*",
-    "browser-sync": "*",
-    "browser-sync-webpack-plugin": "*",
-    "chalk": "*",
-    "css-loader": "*",
-    "eslint": "*",
-    "eslint-loader": "*",
-    "extract-text-webpack-plugin": "*",
-    "faucet": "*",
-    "istanbul-instrumenter-loader": "*",
-    "jscs": "*",
-    "jscs-loader": "*",
-    "karma": "*",
-    "karma-chrome-launcher": "*",
-    "karma-coverage": "*",
-    "karma-phantomjs-launcher": "*",
-    "karma-tap": "*",
-    "karma-webpack": "*",
-    "node-libs-browser": "*",
-    "node-sass": "*",
-    "once": "*",
-    "phantomjs": "*",
-    "phantomjs-polyfill": "*",
-    "sass-loader": "*",
-    "split": "*",
-    "style-loader": "*",
-    "through2": "*",
-    "webpack": "*"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 }
