@@ -17,5 +17,6 @@ Camilo did an amazing job creating a reporter filter for Karma test results, rem
 - Add reporter filter script to beautify the Tape reports
 - Modify the package.json file to always install the latest version of the available packages
 - Update README package installation section
+
 ### Known Issues
 - The packages used by fabric doesn't work with the latest version of iojs v3.0.0 so far (August 7, 2015)
