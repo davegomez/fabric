@@ -16,7 +16,7 @@ Not everything in this world is JavaScript code. From time to time you need a ni
 Sometimes you just want to hit save and see the magic happen. That's why **fabric** includes [Browsersync](http://www.browsersync.io/) as a build-in browser reloading tool, so you never again have to worry about hitting your browser's refresh button.
 
 #### Istanbul
-As part of **fabric**'s strong commitment to TDD, **fabric** includes the powerful code coverage tool [Istanbul](https://github.com/gotwarlost/istanbul): tool, which lets you perform a complete code coverage of your project and inspect this coverage through detailed reports.
+As part of **fabric**'s strong commitment to TDD, **fabric** includes the powerful code coverage tool [Istanbul](https://github.com/gotwarlost/istanbul) tool, which lets you perform a complete code coverage of your project and inspect this coverage through detailed reports.
 
 ## File Structure
 
@@ -34,7 +34,7 @@ You can start coding your JavaScript and SASS inside the ```src``` directory. Th
 ## Usage
 To start using **fabric** for your next JavaScript 6 project, you need to clone this repository in your local environment or fork it to your account.
 
-    git clone  ssh://git@stash.hugeinc.com:7999/eg/fabric.git your-project-name
+    git clone https://github.com/davegomez/fabric.git your-project-name
 
 **fabric** uses [Nodejs](https://nodejs.org/)/[iojs](https://iojs.org/en/index.html) as JavaScript runtime, so you need to install dependencies in your system before you start using **fabric**.
 
