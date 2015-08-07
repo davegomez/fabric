@@ -1,5 +1,4 @@
 {
-    "disallowCapitalizedComments": true,
     "disallowDanglingUnderscores": true,
     "disallowEmptyBlocks": true,
     "disallowIdentifierNames": ["temp", "foo", "bar"],

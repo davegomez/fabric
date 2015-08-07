@@ -11,3 +11,11 @@ This release includes critical bug fixes that makes the Webpack implementation m
 - Update JSCS to version 2.0.0
 - Update JSCS Webpack loader to version 0.2.0
 - Update Karma test runner to version 0.13.5
+
+## v0.3.0
+Camilo did an amazing job creating a reporter filter for Karma test results, removing all the browser name and version crud and adding [faucet TAP Reporter](https://github.com/substack/faucet) to beautify the output.
+- Add reporter filter script to beautify the Tape reports
+- Modify the package.json file to always install the latest version of the available packages
+- Update README package installation section
+### Known Issues
+- The packages used by fabric doesn't work with the latest version of iojs v3.0.0 so far (August 7, 2015)

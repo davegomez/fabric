@@ -48,7 +48,7 @@ When everything is in place in your global environment, you have to install **fa
 
 Run this command inside your project's root directory to install **fabric**'s dependencies:
 
-    npm install
+    npm install --save-dev
 
 You can happily start coding after running this command:
 
@@ -69,7 +69,6 @@ By default **fabric** comes with several linting options for **JavaScript** and 
 - LESS and Stylus Support
 - Traceur Support
 - More linting options
-- Better console output formatting
 
 ## Authoring
 - [David Gómez](https://github.com/davegomez)

@@ -4,16 +4,16 @@
  * @name Reporter Filter
  */
 
-var split = require('split');
-var through2 = require('through2');
-var once = require('once');
-var faucet = require('faucet');
-var PassThrough = require('stream').PassThrough;
+var split = require("split");
+var through2 = require("through2");
+var once = require("once");
+var faucet = require("faucet");
+var PassThrough = require("stream").PassThrough;
 
 /**
  * Empty function. Useful to initialize functions.
  */
-var noop = function() {};
+var noop = function noop() {};
 
 /**
  * Regex functional helper. Receives a regular expression and returns a new function
@@ -21,7 +21,7 @@ var noop = function() {};
  * @param {RegExp} regex
  * @returns {Function}
  */
-var matchRegex = function(regex) {
+var matchRegex = function matchRegex(regex) {
   return function(str) {
     return regex.test(str);
   };
@@ -55,7 +55,7 @@ var sequentialStringCatcher = {
    * @returns {sequentialStringCatcher} this instance.
    */
   on: function(event, handler) {
-    if (typeof handler !== 'function' || !this.callbacks[event]) return this;
+    if (typeof handler !== "function" || !this.callbacks[event]) return this;
     this.callbacks[event] = handler;
     return this;
   },
@@ -68,7 +68,7 @@ var sequentialStringCatcher = {
    */
   add: function(str) {
     if (this.done && !this.callbacks.readingStart(str)) {
-      this.callbacks.addFailure('\n' + str);
+      this.callbacks.addFailure("\n" + str);
       return false;
     }
 
@@ -81,7 +81,7 @@ var sequentialStringCatcher = {
     }
 
     this.done = true;
-    this.callbacks.end(this.queue.join('\n'));
+    this.callbacks.end(this.queue.join("\n"));
     this.queue.length = 0;
     return false;
   }
@@ -95,15 +95,15 @@ var sequentialStringCatcher = {
  */
 var formatTAPReport = function(report, onFormatEnd) {
   var stream = new PassThrough();
-  var formattedReport = '\n\n';
+  var formattedReport = "\n\n";
 
   stream.write(report.replace(/(.*) LOG: '(.*)'/g, '$2'));
   stream.end();
   stream.pipe(faucet())
-    .on('data', function(chunk) {
+    .on("data", function(chunk) {
       formattedReport += chunk;
     })
-    .on('end', function() {
+    .on("end", function() {
       onFormatEnd(formattedReport);
     });
 };
@@ -118,18 +118,18 @@ var formatTAPReport = function(report, onFormatEnd) {
  */
 var configSequentialCatcher = once(function(callbacks) {
   return Object.create(sequentialStringCatcher)
-    .on('addSuccess', callbacks.onAddSuccess)
-    .on('addFailure', callbacks.onAddFailure)
-    .on('readingStart', isTAPFirstLine)
-    .on('reading', isLogLine)
-    .on('end', function(block) {
+    .on("addSuccess", callbacks.onAddSuccess)
+    .on("addFailure", callbacks.onAddFailure)
+    .on("readingStart", isTAPFirstLine)
+    .on("reading", isLogLine)
+    .on("end", function(block) {
       formatTAPReport(block, callbacks.onEnd);
     });
 });
 
 /**
  * Read the lines of the stream and formats the TAP block.
- * @returns {DestroyableTransform} Though2 return object to be used in the stream line.
+ * @returns {Destroyabvarransform} Though2 return object to be used in the stream line.
  */
 var formatLogs = function() {
   var sequentialCatcher;
