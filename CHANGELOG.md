@@ -18,5 +18,5 @@ Camilo did an amazing job creating a reporter filter for Karma test results, rem
 - Modify the package.json file to always install the latest version of the available packages
 - Update README package installation section
 
-### Known Issues
+#### Known Issues
 - The packages used by fabric doesn't work with the latest version of iojs v3.0.0 so far (August 7, 2015)
