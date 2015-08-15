@@ -65,7 +65,7 @@ To start writing your tests, you need to create a ```*.spec.js``` file inside th
 By default **fabric** comes with several linting options for **JavaScript** and **SASS** (scss) using [ESLint](http://eslint.org/) and [JSCS](http://jscs.info/) in the form of Webpack loaders. **fabric** also provides sample and very strict configuration files for these linters inside the root directory that you can freely update to suit your needs.
 
 ## TODO
-- YEOMAN Generator
+- ~~YEOMAN~~ [Cloverfield Generator](https://github.com/cloverfield-tools/cloverfield/)
 - LESS and Stylus Support
 - Traceur Support
 - More linting options
