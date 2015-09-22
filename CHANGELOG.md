@@ -21,3 +21,9 @@ Camilo did an amazing job creating a reporter filter for Karma test results, rem
 #### Known Issues (August 8, 2015)
 - The webpack loader for ESLint does not support yet ESLint ^1.0.0
 - The package node-sass does not support yet iojs-v3.0.0
+
+## v0.4.0
+Fabric now supports **Node.js 4.1.0**, the latest Node.js version after taking all the code base from the **iojs** project.
+- Update all the **NPM** dependencies to work with Node.js v4.1.0
+- Update and simplify the **JSCS** rules adding the **Google** preset to it
+- Update the Webpack configuration file to include the **ESlint** and **JSCS** linting capabilities as pre-loaders
