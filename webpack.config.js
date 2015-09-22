@@ -8,10 +8,12 @@ module.exports = {
     filename: "js/main.js"
   },
   module: {
+    preLoaders: [
+      {test: /\.js$/, loader: "eslint-loader", exclude: /node_modules/},
+      {test: /\.js$/, loader: "jscs-loader", exclude: /node_modules/}
+    ],
     loaders: [
       {test: /\.js$/, loader: "babel-loader", exclude: /node_modules/},
-      {test: /\.js$/, loader: "eslint-loader", exclude: /node_modules/},
-      {test: /\.js$/, loader: "jscs-loader", exclude: /node_modules/},
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract("style-loader",
