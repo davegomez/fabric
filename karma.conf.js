@@ -1,9 +1,9 @@
-var webpack = require("webpack");
+const webpack = require("karma-webpack");
 
 module.exports = function(config) {
   config.set({
     plugins: [
-      "karma-webpack",
+      webpack,
       "karma-tap",
       "karma-chrome-launcher",
       "karma-phantomjs-launcher",
