@@ -27,3 +27,9 @@ Fabric now supports **Node.js 4.1.0**, the latest Node.js version after taking a
 - Update all the **NPM** dependencies to work with Node.js v4.1.0
 - Update and simplify the **JSCS** rules adding the **Google** preset to it
 - Update the Webpack configuration file to include the **ESlint** and **JSCS** linting capabilities as pre-loaders
+
+## v0.4.1
+- Update Webpack configuration file to use ECMAScript 2015 syntax
+- Update Karma configuration file to use ECMAScript 2015 syntax
+- Change JavaScript main input file to index.js and the output file to app.js
+- Update some Node.js dependencies

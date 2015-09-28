@@ -29,7 +29,7 @@ As part of **fabric**'s strong commitment to TDD, **fabric** includes the powerf
         ├── scss
         └── test
 
-You can start coding your JavaScript and SASS inside the ```src``` directory. Then **fabric** will automatically compile and minify all your ```js``` and ```scss``` files into a ```main.js``` and ```main.scss``` inside the ```bin``` directory with its corresponding source map files. All of **fabric**'s output files can be safely used in your projects, even if only older versions of JavaScript are supported.
+You can start coding your JavaScript and SASS inside the ```src``` directory. Then **fabric** will automatically compile and minify all your ```js``` and ```scss``` files into a ```app.js``` and ```main.scss``` inside the ```bin``` directory with its corresponding source map files. All of **fabric**'s output files can be safely used in your projects, even if only older versions of JavaScript are supported.
 
 ## Usage
 To start using **fabric** for your next JavaScript 6 project, you need to clone this repository in your local environment or fork it to your account.
