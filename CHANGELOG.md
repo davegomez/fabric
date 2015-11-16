@@ -1,5 +1,21 @@
 # Release notes
 
+## v0.3.0
+Now fabric offer support for the new and shiny Babel 6
+- Update Webpack configuration file JavaScript code to ECMAScript 2015 syntax
+- Update Babel configuration options to comply new Babel 6 configuration style including .babelrc configuration file
+- Update to ESLint v1.9.0and add new rules
+- Change ESLint parser for babel-eslint
+- Update main fabric's dependencies
+  - Babel 6
+  - ESLint v1.9.0
+  - JSCS v2.5.1
+  - BrowserSync v2.10.0
+  - Webpack v1.12.6
+
+#### Known Issues (November 15, 2015)
+- Webpack doesn't support yet the new Babel way to translate the `export default` expression so `module.exports` must be use instead
+
 ## v0.2.0
 - Update ESLint JavaScript linting tool to version 1.0.0 with lots of new ECMAScript 2015 linting features (check the [release notes](http://eslint.org/blog/2015/07/eslint-1.0.0-released/))
 - Update ```README``` file with punctuation, grammar, formatting, and style improvements
