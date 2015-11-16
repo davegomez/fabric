@@ -1,29 +1,41 @@
-const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+/* global __dirname, module */
+
+import path from 'path';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 
 const SRC = path.resolve(__dirname, 'src/js');
 const BIN = path.resolve(__dirname, 'bin');
 
 module.exports = {
   entry: SRC,
+
   resolve: {
     extensions: ['', '.js']
   },
+
   output: {
     path: BIN,
     filename: 'js/app.js'
   },
+
   devtool: 'eval-source-map',
+
   module: {
     preLoaders: [
       { test: /\.js?$/, loaders: ['eslint', 'jscs'], include: SRC }
     ],
+
     loaders: [
       {
-        test: /\.js?/,
+        test: /\.js?$/,
+        exclude: /(node_modules|bin)/,
         loader: 'babel',
-        include: SRC
+        query: {
+          cacheDirectory: true,
+          presets: ['es2015', 'stage-2'],
+          plugins: ['transform-runtime']
+        }
       },
       {
         test: /\.scss?$/,
@@ -34,6 +46,7 @@ module.exports = {
       }
     ]
   },
+
   plugins: [
     new ExtractTextPlugin('css/main.css', {
       allChunks: true
