@@ -1,5 +1,12 @@
 # Release notes
 
+## v0.3.1
+- Update fabric's documentation
+
+#### Bug Fixes
+- Add `babel-plugin-add-module-exports` for `export default` Babel support (thanks to [Fernando Montoya](https://github.com/montogeek) for suggestion the plugin)
+- Fix Webpack configuration bug related with the `export default` lack of support from Babel
+
 ## v0.3.0
 Now fabric offer support for the new and shiny Babel 6
 - Update Webpack configuration file JavaScript code to ECMAScript 2015 syntax
