@@ -7,7 +7,7 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 const SRC = path.resolve(__dirname, 'src/js');
 const BIN = path.resolve(__dirname, 'bin');
 
-module.exports = {
+export default {
   entry: SRC,
 
   resolve: {
