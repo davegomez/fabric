@@ -1,5 +1,11 @@
 # Release notes
 
+## v0.4.0
+- Update dependencies
+- Include standard and simplified ESLint config file
+- update JSCS rules configuration
+- Update demo files to comply linters requirements
+
 ## v0.3.1
 - Update fabric's documentation
 
